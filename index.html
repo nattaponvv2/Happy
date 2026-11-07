@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>💌 For You</title>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Sriracha&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════
+   RESET & VARIABLES
+   ═══════════════════════════════════════════ */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: 'Sriracha', 'Caveat', cursive, sans-serif;
+}
+
+button { cursor: pointer; border: none; font-family: inherit; background: none; }
+
+/* ═══════════════════════════════════════════
+   PAGES SYSTEM
+   ═══════════════════════════════════════════ */
+.page {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.6s ease, transform 0.6s ease;
+  z-index: 1;
+}
+
+.page.hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.95);
+}
+
+.page.active {
+  opacity: 1;
+  pointer-events: all;
+  transform: scale(1);
+  z-index: 10;
+}
+
+/* ═══════════════════════════════════════════
+   PAGE 1: NOTIFICATION ("hey babe!")
+   ═══════════════════════════════════════════ */
+#page-notification {
+  background: #f5f0eb;
+}
+
+.notif-content {
+  text-align: center;
+  cursor: pointer;
+  animation: notifAppear 1s ease-out;
+}
+
+@keyframes notifAppear {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.notif-hey {
+  font-family: 'Caveat', cursive;
+  font-size: 32px;
+  color: #333;
+  margin-bottom: 24px;
+  letter-spacing: 1px;
+}
+
+.notif-envelope {
+  width: 120px;
+  height: 90px;
+  margin: 0 auto 28px;
+  position: relative;
+  cursor: pointer;
+  animation: envelopeBounce 2s ease-in-out infinite;
+}
+
+@keyframes envelopeBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.envelope-body {
+  width: 120px;
+  height: 80px;
+  background: #e74c3c;
+  border-radius: 6px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+}
+
+.envelope-flap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  border-left: 60px solid transparent;
+  border-right: 60px solid transparent;
+  border-top: 45px solid #c0392b;
+}
+
+.envelope-inner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  border-left: 60px solid transparent;
+  border-right: 60px solid transparent;
+  border-bottom: 45px solid #e74c3c;
+  z-index: 2;
+}
+
+.notif-text {
+  font-family: 'Caveat', cursive;
+  font-size: 26px;
+  color: #333;
+  letter-spacing: 0.5px;
+}
+
+.notif-tap-hint {
+  margin-top: 40px;
+  font-size: 14px;
+  color: #999;
+  animation: fadeInOut 2s ease-in-out infinite;
+}
+
+@keyframes fadeInOut {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+/* ═══════════════════════════════════════════
+   PAGE 2: EMAIL CARD
+   ═══════════════════════════════════════════ */
+#page-email {
+  background: #f5f0eb;
+  padding: 24px;
+}
+
+.email-card {
+  width: 100%;
+  max-width: 420px;
+  background: #e74c3c;
+  border-radius: 16px;
+  padding: 32px 28px;
+  color: #fff;
+  position: relative;
+  animation: cardSlideUp 0.6s ease-out;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+}
+
+@keyframes cardSlideUp {
+  from { opacity: 0; transform: translateY(50px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.email-field {
+  margin-bottom: 12px;
+}
+
+.email-label {
+  font-family: 'Caveat', cursive;
+  font-size: 22px;
+  font-weight: 600;
+  display: inline;
+}
+
+.email-value {
+  font-family: 'Caveat', cursive;
+  font-size: 20px;
+  margin-left: 4px;
+  display: inline;
+}
+
+.email-line {
+  display: inline-block;
+  width: 180px;
+  border-bottom: 2px solid rgba(255,255,255,0.5);
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+.email-divider {
+  width: 100%;
+  height: 1px;
+  background: rgba(255,255,255,0.2);
+  margin: 20px 0;
+}
+
+.email-message-label {
+  font-family: 'Caveat', cursive;
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.email-message-body {
+  font-family: 'Caveat', cursive;
+  font-size: 24px;
+  line-height: 1.6;
+  margin-bottom: 32px;
+}
+
+.email-attachment {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.email-attachment a {
+  color: #fff;
+  font-family: 'Caveat', cursive;
+  font-size: 20px;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  animation: pulseGlow 2s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
+}
+
+.email-attachment a:hover {
+  opacity: 0.8;
+}
+
+/* ═══════════════════════════════════════════
+   PAGE 3: BIRTHDAY SURPRISE
+   ═══════════════════════════════════════════ */
+#page-birthday {
+  background: #d32f2f;
+  overflow-y: auto;
+  overflow-x: hidden;
+  justify-content: flex-start;
+  padding-top: 0;
+}
+
+.birthday-wrapper {
+  width: 100%;
+  min-height: 100%;
+  position: relative;
+  padding-bottom: 60px;
+}
+
+/* Bunting / Triangle Flags */
+.bunting {
+  width: 100%;
+  height: 60px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin-top: 0;
+}
+
+.bunting-svg {
+  width: 100%;
+  max-width: 600px;
+  height: 80px;
+}
+
+.bunting-row {
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  width: 100%;
+  padding: 0 10px;
+}
+
+.flag {
+  width: 0;
+  height: 0;
+  border-left: 18px solid transparent;
+  border-right: 18px solid transparent;
+  border-top: 30px solid;
+  display: inline-block;
+  margin: 0 2px;
+  animation: flagSway 3s ease-in-out infinite;
+}
+
+.flag:nth-child(odd) { border-top-color: #4CAF50; animation-delay: 0s; }
+.flag:nth-child(even) { border-top-color: #2196F3; animation-delay: 0.5s; }
+.flag:nth-child(3n) { border-top-color: #FF9800; }
+.flag:nth-child(4n) { border-top-color: #E91E63; }
+.flag:nth-child(5n) { border-top-color: #9C27B0; }
+
+@keyframes flagSway {
+  0%, 100% { transform: rotate(-3deg); }
+  50% { transform: rotate(3deg); }
+}
+
+.bunting-string {
+  position: absolute;
+  top: 0;
+  left: 5%;
+  right: 5%;
+  height: 3px;
+  background: #333;
+  border-radius: 2px;
+}
+
+/* Decorations area */
+.deco-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 20px 0;
+  position: relative;
+}
+
+/* Stickers */
+.sticker-area {
+  position: relative;
+  width: 280px;
+  height: 280px;
+  margin: 0 auto;
+}
+
+.sticker {
+  position: absolute;
+  font-size: 40px;
+  animation: stickerPop 0.5s ease-out backwards;
+}
+
+.sticker-hat {
+  top: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 70px;
+  z-index: 5;
+  animation-delay: 0.3s;
+}
+
+.sticker-star1 {
+  top: 5px;
+  right: 10px;
+  font-size: 35px;
+  animation-delay: 0.5s;
+}
+
+.sticker-star2 {
+  top: 30px;
+  left: 10px;
+  font-size: 30px;
+  animation-delay: 0.6s;
+}
+
+.sticker-star3 {
+  bottom: 60px;
+  right: 5px;
+  font-size: 28px;
+  animation-delay: 0.7s;
+}
+
+.sticker-cake {
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 50px;
+  animation-delay: 0.8s;
+}
+
+.sticker-heart1 {
+  top: 80px;
+  left: 5px;
+  font-size: 28px;
+  animation-delay: 0.9s;
+  color: #ff6b6b;
+}
+
+.sticker-heart2 {
+  top: 60px;
+  right: 15px;
+  font-size: 24px;
+  animation-delay: 1s;
+  color: #ff6b6b;
+}
+
+.sticker-confetti1 {
+  top: 15px;
+  left: 35px;
+  font-size: 30px;
+  animation-delay: 0.4s;
+}
+
+.sticker-confetti2 {
+  bottom: 80px;
+  left: 20px;
+  font-size: 28px;
+  animation-delay: 1.1s;
+}
+
+.sticker-badge {
+  top: 40px;
+  left: 50%;
+  transform: translateX(-30%);
+  font-size: 55px;
+  animation-delay: 0.2s;
+  z-index: 4;
+}
+
+@keyframes stickerPop {
+  from { transform: scale(0) rotate(-20deg); opacity: 0; }
+  to { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+/* Photo frame */
+.photo-frame {
+  width: 160px;
+  height: 160px;
+  border-radius: 16px;
+  overflow: hidden;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+  border: 4px solid #fff;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  background: #ffcdd2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.photo-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.photo-placeholder {
+  font-size: 50px;
+  color: #e53935;
+}
+
+/* Birthday message */
+.birthday-msg {
+  padding: 20px 32px 40px;
+  text-align: left;
+  max-width: 440px;
+  margin: 0 auto;
+}
+
+.bday-title {
+  font-family: 'Caveat', cursive;
+  font-size: 28px;
+  color: #fff;
+  margin-bottom: 16px;
+  font-weight: 600;
+}
+
+.bday-body {
+  font-family: 'Caveat', cursive;
+  font-size: 20px;
+  color: rgba(255,255,255,0.95);
+  line-height: 1.8;
+}
+
+/* Bottom decorative bunting */
+.bunting-bottom {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 20;
+  display: flex;
+  justify-content: center;
+}
+
+.bunting-bottom .flag {
+  border-top: none;
+  border-bottom: 30px solid;
+  border-left: 18px solid transparent;
+  border-right: 18px solid transparent;
+}
+
+.bunting-bottom .flag:nth-child(odd) { border-bottom-color: #4CAF50; }
+.bunting-bottom .flag:nth-child(even) { border-bottom-color: #2196F3; }
+.bunting-bottom .flag:nth-child(3n) { border-bottom-color: #FF9800; }
+.bunting-bottom .flag:nth-child(4n) { border-bottom-color: #E91E63; }
+.bunting-bottom .flag:nth-child(5n) { border-bottom-color: #9C27B0; }
+
+/* Floating hearts in birthday page */
+.floating-hearts {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 15;
+  overflow: hidden;
+}
+
+.float-heart {
+  position: absolute;
+  font-size: 20px;
+  opacity: 0;
+  animation: floatUp linear infinite;
+}
+
+@keyframes floatUp {
+  0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+  10% { opacity: 0.7; }
+  90% { opacity: 0.7; }
+  100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+}
+
+/* ═══════════════════════════════════════════
+   CONFETTI CANVAS
+   ═══════════════════════════════════════════ */
+#confetti {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  pointer-events: none;
+}
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════ */
+@media (min-width: 600px) {
+  .notif-hey { font-size: 40px; }
+  .notif-text { font-size: 32px; }
+  .notif-envelope { width: 150px; height: 110px; }
+  .envelope-body { width: 150px; height: 100px; }
+  .envelope-flap { border-left-width: 75px; border-right-width: 75px; border-top-width: 55px; }
+  .envelope-inner { border-left-width: 75px; border-right-width: 75px; border-bottom-width: 55px; }
+  .email-card { padding: 40px 36px; }
+  .sticker-area { width: 320px; height: 320px; }
+  .photo-frame { width: 180px; height: 180px; }
+  .bday-title { font-size: 34px; }
+  .bday-body { font-size: 24px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ CONFETTI ═══ -->
+<canvas id="confetti"></canvas>
+
+<!-- ════════════════════════════════════════════
+     PAGE 1: NOTIFICATION
+     ════════════════════════════════════════════ -->
+<div id="page-notification" class="page active">
+  <div class="notif-content" id="notif-click">
+    <p class="notif-hey">สวัสดี!</p>
+
+    <div class="notif-envelope">
+      <div class="envelope-body">
+        <div class="envelope-flap"></div>
+        <div class="envelope-inner"></div>
+      </div>
+    </div>
+
+    <p class="notif-text">มีข้อความใหม่สำหรับคุณ</p>
+
+    <p class="notif-tap-hint">แตะเพื่อเปิดอ่าน 💌</p>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     PAGE 2: EMAIL CARD
+     ════════════════════════════════════════════ -->
+<div id="page-email" class="page hidden">
+  <div class="email-card">
+    <div class="email-field">
+      <span class="email-label">From:</span>
+      <span class="email-line"></span>
+    </div>
+    <div class="email-field">
+      <span class="email-label">To:🍥</span>
+    </div>
+
+    <div class="email-divider"></div>
+
+    <p class="email-message-label">Message:</p>
+    <p class="email-message-body">เตรียมพบกับเซอร์ไพรส์</p>
+
+    <div class="email-attachment">
+      <a id="see-attachment">📎 see attachment</a>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     PAGE 3: BIRTHDAY SURPRISE
+     ════════════════════════════════════════════ -->
+<div id="page-birthday" class="page hidden">
+  <div class="birthday-wrapper">
+
+    <!-- Top Bunting -->
+    <div class="bunting">
+      <div class="bunting-string"></div>
+      <div class="bunting-row" style="padding-top: 4px;">
+        <div class="flag"></div>
+        <div class="flag"></div>
+        <div class="flag"></div>
+        <div class="flag"></div>
+        <div class="flag"></div>
+        <div class="flag"></div>
+        <div class="flag"></div>
+        <div class="flag"></div>
+        <div class="flag"></div>
+        <div class="flag"></div>
+        <div class="flag"></div>
+        <div class="flag"></div>
+        <div class="flag"></div>
+        <div class="flag"></div>
+        <div class="flag"></div>
+      </div>
+    </div>
+
+    <!-- Stickers + Photo Area -->
+    <div class="deco-area">
+      <div class="sticker-area">
+        <!-- Party hat -->
+        <div class="sticker sticker-hat">🥳</div>
+        <!-- Stars -->
+        <div class="sticker sticker-star1">⭐</div>
+        <div class="sticker sticker-star2">🌟</div>
+        <div class="sticker sticker-star3">✨</div>
+        <!-- Birthday badge -->
+        <div class="sticker sticker-badge">🎂</div>
+        <!-- Cake -->
+        <div class="sticker sticker-cake">🎁</div>
+        <!-- Hearts -->
+        <div class="sticker sticker-heart1">❤️</div>
+        <div class="sticker sticker-heart2">💕</div>
+        <!-- Confetti -->
+        <div class="sticker sticker-confetti1">🎊</div>
+        <div class="sticker sticker-confetti2">🎉</div>
+
+        <!-- Photo Frame -->
+        <div class="photo-frame">
+          <!-- ✏️ ใส่รูปภาพตรงนี้: เปลี่ยน div ด้านล่างเป็น <img src="photo.jpg" alt="birthday person"> -->
+          <div class="photo-placeholder">📷</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Birthday Message -->
+    <div class="birthday-msg">
+      <!-- ✏️ เปลี่ยนข้อความอวยพรได้ตรงนี้ -->
+      <h2 class="bday-title">Happy Birthday, my love.</h2>
+      <p class="bday-body">
+        Dating with you is truly one of the best things that has ever happened to me. From the moment you came into my life, everything started to feel brighter and more meaningful. Thank you for loving me, for always being there, and for making every single day an adventure worth living.
+        <br><br>
+        I hope this birthday brings you all the joy and happiness you deserve. 🎂💕
+        <br><br>
+        — with all my love ♥
+      </p>
+    </div>
+
+    <!-- Bottom Bunting -->
+    <div style="display: flex; justify-content: center; padding: 0 10px; margin-top: 20px;">
+      <div class="flag" style="border-top:none;border-bottom:30px solid #4CAF50;border-left:18px solid transparent;border-right:18px solid transparent;margin:0 2px;"></div>
+      <div class="flag" style="border-top:none;border-bottom:30px solid #2196F3;border-left:18px solid transparent;border-right:18px solid transparent;margin:0 2px;"></div>
+      <div class="flag" style="border-top:none;border-bottom:30px solid #FF9800;border-left:18px solid transparent;border-right:18px solid transparent;margin:0 2px;"></div>
+      <div class="flag" style="border-top:none;border-bottom:30px solid #E91E63;border-left:18px solid transparent;border-right:18px solid transparent;margin:0 2px;"></div>
+      <div class="flag" style="border-top:none;border-bottom:30px solid #9C27B0;border-left:18px solid transparent;border-right:18px solid transparent;margin:0 2px;"></div>
+      <div class="flag" style="border-top:none;border-bottom:30px solid #4CAF50;border-left:18px solid transparent;border-right:18px solid transparent;margin:0 2px;"></div>
+      <div class="flag" style="border-top:none;border-bottom:30px solid #2196F3;border-left:18px solid transparent;border-right:18px solid transparent;margin:0 2px;"></div>
+      <div class="flag" style="border-top:none;border-bottom:30px solid #FF9800;border-left:18px solid transparent;border-right:18px solid transparent;margin:0 2px;"></div>
+      <div class="flag" style="border-top:none;border-bottom:30px solid #E91E63;border-left:18px solid transparent;border-right:18px solid transparent;margin:0 2px;"></div>
+      <div class="flag" style="border-top:none;border-bottom:30px solid #9C27B0;border-left:18px solid transparent;border-right:18px solid transparent;margin:0 2px;"></div>
+      <div class="flag" style="border-top:none;border-bottom:30px solid #4CAF50;border-left:18px solid transparent;border-right:18px solid transparent;margin:0 2px;"></div>
+      <div class="flag" style="border-top:none;border-bottom:30px solid #2196F3;border-left:18px solid transparent;border-right:18px solid transparent;margin:0 2px;"></div>
+      <div class="flag" style="border-top:none;border-bottom:30px solid #FF9800;border-left:18px solid transparent;border-right:18px solid transparent;margin:0 2px;"></div>
+      <div class="flag" style="border-top:none;border-bottom:30px solid #E91E63;border-left:18px solid transparent;border-right:18px solid transparent;margin:0 2px;"></div>
+      <div class="flag" style="border-top:none;border-bottom:30px solid #9C27B0;border-left:18px solid transparent;border-right:18px solid transparent;margin:0 2px;"></div>
+    </div>
+
+  </div>
+
+  <!-- Floating hearts -->
+  <div class="floating-hearts" id="floating-hearts"></div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     JAVASCRIPT
+     ════════════════════════════════════════════ -->
+<script>
+// ═══════════════════════════════════════════
+// PAGE NAVIGATION
+// ═══════════════════════════════════════════
+const pages = {
+  notification: document.getElementById('page-notification'),
+  email: document.getElementById('page-email'),
+  birthday: document.getElementById('page-birthday')
+};
+
+function showPage(pageName) {
+  Object.values(pages).forEach(p => {
+    p.classList.remove('active');
+    p.classList.add('hidden');
+  });
+  pages[pageName].classList.remove('hidden');
+  pages[pageName].classList.add('active');
+}
+
+// ═══════════════════════════════════════════
+// CONFETTI
+// ═══════════════════════════════════════════
+const canvas = document.getElementById('confetti');
+const ctx = canvas.getContext('2d');
+let confettiPieces = [];
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+class ConfettiPiece {
+  constructor() {
+    this.x = Math.random() * canvas.width;
+    this.y = -10;
+    this.w = Math.random() * 10 + 5;
+    this.h = Math.random() * 6 + 3;
+    this.color = ['#FF6B6B','#4ECDC4','#45B7D1','#FFA07A','#98D8C8','#F7DC6F','#BB8FCE','#FF69B4','#85C1E9'][Math.floor(Math.random() * 9)];
+    this.vy = Math.random() * 3 + 2;
+    this.vx = Math.random() * 4 - 2;
+    this.angle = Math.random() * 360;
+    this.va = Math.random() * 8 - 4;
+    this.opacity = 1;
+  }
+  update() {
+    this.y += this.vy;
+    this.x += this.vx;
+    this.angle += this.va;
+    if (this.y > canvas.height + 20) this.opacity -= 0.05;
+    return this.opacity > 0;
+  }
+  draw() {
+    ctx.save();
+    ctx.translate(this.x, this.y);
+    ctx.rotate(this.angle * Math.PI / 180);
+    ctx.globalAlpha = this.opacity;
+    ctx.fillStyle = this.color;
+    ctx.fillRect(-this.w / 2, -this.h / 2, this.w, this.h);
+    ctx.restore();
+  }
+}
+
+function fireConfetti() {
+  for (let i = 0; i < 150; i++) {
+    const p = new ConfettiPiece();
+    p.y = -Math.random() * 200;
+    confettiPieces.push(p);
+  }
+  // Add more over time
+  let count = 0;
+  const iv = setInterval(() => {
+    for (let i = 0; i < 8; i++) confettiPieces.push(new ConfettiPiece());
+    if (++count > 40) clearInterval(iv);
+  }, 80);
+  animateConfetti();
+}
+
+function animateConfetti() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  confettiPieces = confettiPieces.filter(p => { p.draw(); return p.update(); });
+  if (confettiPieces.length > 0) requestAnimationFrame(animateConfetti);
+  else ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+// ═══════════════════════════════════════════
+// FLOATING HEARTS
+// ═══════════════════════════════════════════
+function createFloatingHearts() {
+  const container = document.getElementById('floating-hearts');
+  const hearts = ['❤️', '💕', '💗', '💖', '🩷', '🤍'];
+  for (let i = 0; i < 15; i++) {
+    const h = document.createElement('div');
+    h.className = 'float-heart';
+    h.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+    h.style.left = Math.random() * 100 + '%';
+    h.style.fontSize = (Math.random() * 16 + 14) + 'px';
+    h.style.animationDuration = (Math.random() * 8 + 6) + 's';
+    h.style.animationDelay = Math.random() * 10 + 's';
+    container.appendChild(h);
+  }
+}
+
+// ═══════════════════════════════════════════
+// EVENT: Click notification → Email
+// ═══════════════════════════════════════════
+document.getElementById('notif-click').addEventListener('click', () => {
+  showPage('email');
+});
+
+// ═══════════════════════════════════════════
+// EVENT: Click "see attachment" → Birthday
+// ═══════════════════════════════════════════
+document.getElementById('see-attachment').addEventListener('click', (e) => {
+  e.preventDefault();
+  showPage('birthday');
+  createFloatingHearts();
+  setTimeout(() => fireConfetti(), 400);
+});
+</script>
+
+</body>
+</html>
