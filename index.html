@@ -468,14 +468,16 @@ button { cursor: pointer; border: none; font-family: inherit; background: none; 
   line-height: 1.8;
 }
 
-.birthday-wish {
+.birthday-wish,
+.birthday-tune {
   max-width: 440px;
   margin: 0 auto;
   padding: 0 32px 32px;
   text-align: center;
 }
 
-.birthday-wish h3 {
+.birthday-wish h3,
+.birthday-tune h3 {
   font-family: 'Caveat', cursive;
   font-size: 26px;
   color: #fff;
@@ -718,6 +720,12 @@ button { cursor: pointer; border: none; font-family: inherit; background: none; 
       </p>
     </section>
 
+    <section class="birthday-tune" aria-labelledby="birthday-tune-title">
+      <h3 id="birthday-tune-title">A little birthday tune</h3>
+      <button class="wish-button" id="tune-button" type="button">Play a little tune ♫</button>
+      <p class="birthday-wish-message" id="tune-status" aria-live="polite" hidden></p>
+    </section>
+
     <!-- Bottom Bunting -->
     <div style="display: flex; justify-content: center; padding: 0 10px; margin-top: 20px;">
       <div class="flag" style="border-top:none;border-bottom:30px solid #4CAF50;border-left:18px solid transparent;border-right:18px solid transparent;margin:0 2px;"></div>
@@ -872,6 +880,46 @@ document.getElementById('wish-button').addEventListener('click', (e) => {
   document.getElementById('birthday-wish-message').hidden = false;
   button.setAttribute('aria-expanded', 'true');
   button.textContent = 'Wish opened 🎉';
+});
+
+document.getElementById('tune-button').addEventListener('click', async (e) => {
+  const button = e.currentTarget;
+  const status = document.getElementById('tune-status');
+  const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+
+  status.hidden = false;
+  if (!AudioContextClass) {
+    status.textContent = 'Audio is not available in this browser.';
+    return;
+  }
+
+  button.disabled = true;
+  status.textContent = 'Playing a little tune...';
+
+  const audioContext = new AudioContextClass();
+  const melody = [523.25, 659.25, 783.99, 1046.5];
+  const startTime = audioContext.currentTime + 0.05;
+
+  melody.forEach((frequency, index) => {
+    const noteStart = startTime + index * 0.24;
+    const oscillator = audioContext.createOscillator();
+    const volume = audioContext.createGain();
+    oscillator.type = 'sine';
+    oscillator.frequency.value = frequency;
+    volume.gain.setValueAtTime(0.0001, noteStart);
+    volume.gain.exponentialRampToValueAtTime(0.08, noteStart + 0.03);
+    volume.gain.exponentialRampToValueAtTime(0.0001, noteStart + 0.32);
+    oscillator.connect(volume);
+    volume.connect(audioContext.destination);
+    oscillator.start(noteStart);
+    oscillator.stop(noteStart + 0.34);
+  });
+
+  window.setTimeout(async () => {
+    await audioContext.close();
+    button.disabled = false;
+    status.textContent = 'Hope that added a little sparkle to your day. 🎉';
+  }, 1400);
 });
 </script>
 
