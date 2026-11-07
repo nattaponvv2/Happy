@@ -468,6 +468,48 @@ button { cursor: pointer; border: none; font-family: inherit; background: none; 
   line-height: 1.8;
 }
 
+.birthday-wish {
+  max-width: 440px;
+  margin: 0 auto;
+  padding: 0 32px 32px;
+  text-align: center;
+}
+
+.birthday-wish h3 {
+  font-family: 'Caveat', cursive;
+  font-size: 26px;
+  color: #fff;
+}
+
+.wish-button {
+  margin-top: 12px;
+  padding: 10px 18px;
+  border: 1px solid rgba(255,255,255,0.75);
+  border-radius: 6px;
+  background: rgba(255,255,255,0.12);
+  color: #fff;
+  font-size: 16px;
+  transition: background 0.2s ease;
+}
+
+.wish-button:hover,
+.wish-button:focus-visible {
+  background: rgba(255,255,255,0.24);
+}
+
+.wish-button:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+
+.birthday-wish-message {
+  margin-top: 16px;
+  color: rgba(255,255,255,0.95);
+  font-family: 'Caveat', cursive;
+  font-size: 22px;
+  line-height: 1.6;
+}
+
 /* Bottom decorative bunting */
 .bunting-bottom {
   position: fixed;
@@ -666,6 +708,16 @@ button { cursor: pointer; border: none; font-family: inherit; background: none; 
       </p>
     </div>
 
+    <section class="birthday-wish" aria-labelledby="birthday-wish-title">
+      <h3 id="birthday-wish-title">One more wish</h3>
+      <button class="wish-button" id="wish-button" type="button" aria-expanded="false" aria-controls="birthday-wish-message">
+        Open your birthday wish 🎁
+      </button>
+      <p class="birthday-wish-message" id="birthday-wish-message" aria-live="polite" hidden>
+        May the year ahead bring you happy surprises, new adventures, and plenty of reasons to celebrate. 🎉
+      </p>
+    </section>
+
     <!-- Bottom Bunting -->
     <div style="display: flex; justify-content: center; padding: 0 10px; margin-top: 20px;">
       <div class="flag" style="border-top:none;border-bottom:30px solid #4CAF50;border-left:18px solid transparent;border-right:18px solid transparent;margin:0 2px;"></div>
@@ -813,6 +865,13 @@ document.getElementById('see-attachment').addEventListener('click', (e) => {
   showPage('birthday');
   createFloatingHearts();
   setTimeout(() => fireConfetti(), 400);
+});
+
+document.getElementById('wish-button').addEventListener('click', (e) => {
+  const button = e.currentTarget;
+  document.getElementById('birthday-wish-message').hidden = false;
+  button.setAttribute('aria-expanded', 'true');
+  button.textContent = 'Wish opened 🎉';
 });
 </script>
 
