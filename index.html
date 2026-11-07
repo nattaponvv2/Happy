@@ -9,6 +9,15 @@
 /* ═══════════════════════════════════════════
    RESET & VARIABLES
    ═══════════════════════════════════════════ */
+:root {
+  --paper: #d8bd94;
+  --paper-light: #ead3ad;
+  --paper-fold: #c9aa7b;
+  --paper-background: #f5f0eb;
+  --kraft: #8b6038;
+  --kraft-dark: #654a31;
+}
+
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 html, body {
@@ -51,7 +60,7 @@ button { cursor: pointer; border: none; font-family: inherit; background: none; 
    PAGE 1: NOTIFICATION ("hey babe!")
    ═══════════════════════════════════════════ */
 #page-notification {
-  background: #f5f0eb;
+  background: var(--paper-background);
 }
 
 .notif-content {
@@ -90,11 +99,14 @@ button { cursor: pointer; border: none; font-family: inherit; background: none; 
 .envelope-body {
   width: 120px;
   height: 80px;
-  background: #e74c3c;
-  border-radius: 6px;
+  background:
+    linear-gradient(32deg, transparent 49.2%, rgba(120, 87, 49, 0.3) 50%, transparent 50.8%) left / 50% 100% no-repeat,
+    linear-gradient(-32deg, transparent 49.2%, rgba(120, 87, 49, 0.3) 50%, transparent 50.8%) right / 50% 100% no-repeat,
+    var(--paper);
+  border-radius: 2px;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+  box-shadow: 0 8px 16px rgba(92, 67, 39, 0.2);
 }
 
 .envelope-flap {
@@ -105,7 +117,7 @@ button { cursor: pointer; border: none; font-family: inherit; background: none; 
   height: 0;
   border-left: 60px solid transparent;
   border-right: 60px solid transparent;
-  border-top: 45px solid #c0392b;
+  border-top: 45px solid var(--paper-light);
 }
 
 .envelope-inner {
@@ -116,7 +128,7 @@ button { cursor: pointer; border: none; font-family: inherit; background: none; 
   height: 0;
   border-left: 60px solid transparent;
   border-right: 60px solid transparent;
-  border-bottom: 45px solid #e74c3c;
+  border-bottom: 45px solid var(--paper-fold);
   z-index: 2;
 }
 
@@ -143,14 +155,14 @@ button { cursor: pointer; border: none; font-family: inherit; background: none; 
    PAGE 2: EMAIL CARD
    ═══════════════════════════════════════════ */
 #page-email {
-  background: #f5f0eb;
+  background: var(--paper-background);
   padding: 24px;
 }
 
 .email-card {
   width: 100%;
   max-width: 420px;
-  background: #e74c3c;
+  background: var(--kraft);
   border-radius: 16px;
   padding: 32px 28px;
   color: #fff;
@@ -240,7 +252,7 @@ button { cursor: pointer; border: none; font-family: inherit; background: none; 
    PAGE 3: BIRTHDAY SURPRISE
    ═══════════════════════════════════════════ */
 #page-birthday {
-  background: #d32f2f;
+  background: var(--kraft-dark);
   overflow-y: auto;
   overflow-x: hidden;
   justify-content: flex-start;
@@ -319,7 +331,7 @@ button { cursor: pointer; border: none; font-family: inherit; background: none; 
   position: relative;
 }
 
-/* Stickers */
+/* Photo and cake sticker collage */
 .sticker-area {
   position: relative;
   width: 280px;
@@ -327,108 +339,19 @@ button { cursor: pointer; border: none; font-family: inherit; background: none; 
   margin: 0 auto;
 }
 
-.sticker {
-  position: absolute;
-  font-size: 40px;
-  animation: stickerPop 0.5s ease-out backwards;
-}
-
-.sticker-hat {
-  top: -5px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 70px;
-  z-index: 5;
-  animation-delay: 0.3s;
-}
-
-.sticker-star1 {
-  top: 5px;
-  right: 10px;
-  font-size: 35px;
-  animation-delay: 0.5s;
-}
-
-.sticker-star2 {
-  top: 30px;
-  left: 10px;
-  font-size: 30px;
-  animation-delay: 0.6s;
-}
-
-.sticker-star3 {
-  bottom: 60px;
-  right: 5px;
-  font-size: 28px;
-  animation-delay: 0.7s;
-}
-
-.sticker-cake {
-  bottom: 40px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 50px;
-  animation-delay: 0.8s;
-}
-
-.sticker-heart1 {
-  top: 80px;
-  left: 5px;
-  font-size: 28px;
-  animation-delay: 0.9s;
-  color: #ff6b6b;
-}
-
-.sticker-heart2 {
-  top: 60px;
-  right: 15px;
-  font-size: 24px;
-  animation-delay: 1s;
-  color: #ff6b6b;
-}
-
-.sticker-confetti1 {
-  top: 15px;
-  left: 35px;
-  font-size: 30px;
-  animation-delay: 0.4s;
-}
-
-.sticker-confetti2 {
-  bottom: 80px;
-  left: 20px;
-  font-size: 28px;
-  animation-delay: 1.1s;
-}
-
-.sticker-badge {
-  top: 40px;
-  left: 50%;
-  transform: translateX(-30%);
-  font-size: 55px;
-  animation-delay: 0.2s;
-  z-index: 4;
-}
-
-@keyframes stickerPop {
-  from { transform: scale(0) rotate(-20deg); opacity: 0; }
-  to { transform: scale(1) rotate(0deg); opacity: 1; }
-}
-
-/* Photo frame */
 .photo-frame {
-  width: 160px;
-  height: 160px;
-  border-radius: 16px;
-  overflow: hidden;
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 3;
-  border: 4px solid #fff;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-  background: #ffcdd2;
+  width: 164px;
+  height: 174px;
+  border-radius: 4px;
+  overflow: hidden;
+  transform: translate(-50%, -50%) rotate(4deg);
+  z-index: 2;
+  border: 7px solid #fff;
+  box-shadow: 0 8px 20px rgba(35, 20, 20, 0.28);
+  background: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -440,9 +363,71 @@ button { cursor: pointer; border: none; font-family: inherit; background: none; 
   object-fit: cover;
 }
 
+.cake-sticker {
+  position: absolute;
+  left: 17px;
+  bottom: 32px;
+  width: 86px;
+  height: 78px;
+  z-index: 4;
+  background: #bd5960;
+  border: 5px solid #fff;
+  border-radius: 5px;
+  box-shadow: 0 5px 12px rgba(35, 20, 20, 0.25);
+  transform: rotate(-8deg);
+}
+
+.cake-illustration {
+  position: absolute;
+  left: 13px;
+  bottom: 9px;
+  width: 48px;
+  height: 30px;
+  border: 2px solid #fff5e8;
+  border-radius: 4px 4px 10px 10px;
+  background: repeating-linear-gradient(to bottom, #f8e6d5 0 8px, #e9b9a5 8px 12px);
+}
+
+.cake-illustration::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: -3px;
+  width: 50px;
+  height: 11px;
+  border-radius: 50%;
+  background: #fff5e8;
+}
+
+.cake-candle {
+  position: absolute;
+  top: -19px;
+  width: 4px;
+  height: 14px;
+  z-index: 1;
+  border-radius: 2px;
+  background: #f1d081;
+}
+
+.cake-candle::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: -1px;
+  width: 6px;
+  height: 7px;
+  border-radius: 50% 50% 50% 0;
+  background: #f4a451;
+  transform: rotate(-45deg);
+}
+
+.cake-candle:nth-child(1) { left: 10px; }
+.cake-candle:nth-child(2) { left: 21px; }
+.cake-candle:nth-child(3) { left: 32px; }
+
 .photo-placeholder {
   font-size: 50px;
-  color: #e53935;
+  color: var(--kraft-dark);
 }
 
 /* Birthday message */
@@ -623,16 +608,33 @@ button { cursor: pointer; border: none; font-family: inherit; background: none; 
 
 .float-heart {
   position: absolute;
-  font-size: 20px;
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  background: #ee9bb3;
   opacity: 0;
   animation: floatUp linear infinite;
+  transform: rotate(-45deg);
 }
 
+.float-heart::before,
+.float-heart::after {
+  content: '';
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: inherit;
+}
+
+.float-heart::before { top: -6px; left: 0; }
+.float-heart::after { top: 0; left: 6px; }
+
 @keyframes floatUp {
-  0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+  0% { transform: translateY(100vh) rotate(-45deg); opacity: 0; }
   10% { opacity: 0.7; }
   90% { opacity: 0.7; }
-  100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+  100% { transform: translateY(-10vh) rotate(315deg); opacity: 0; }
 }
 
 /* ═══════════════════════════════════════════
@@ -657,7 +659,8 @@ button { cursor: pointer; border: none; font-family: inherit; background: none; 
   .envelope-inner { border-left-width: 75px; border-right-width: 75px; border-bottom-width: 55px; }
   .email-card { padding: 40px 36px; }
   .sticker-area { width: 320px; height: 320px; }
-  .photo-frame { width: 180px; height: 180px; }
+  .photo-frame { width: 184px; height: 194px; }
+  .cake-sticker { left: 35px; bottom: 38px; }
   .bday-title { font-size: 34px; }
   .bday-body { font-size: 24px; }
 }
@@ -684,7 +687,7 @@ button { cursor: pointer; border: none; font-family: inherit; background: none; 
      ════════════════════════════════════════════ -->
 <div id="page-notification" class="page active">
   <div class="notif-content" id="notif-click">
-    <p class="notif-hey" lang="th">สวัสดี!</p>
+    <p class="notif-hey" lang="th">ฟิ้วววว</p>
 
     <div class="notif-envelope">
       <div class="envelope-body">
@@ -693,7 +696,7 @@ button { cursor: pointer; border: none; font-family: inherit; background: none; 
       </div>
     </div>
 
-    <p class="notif-text" lang="th">มีข้อความใหม่สำหรับคุณ</p>
+    <p class="notif-text" lang="th"></p>
 
     <p class="notif-tap-hint" lang="th">แตะเพื่อเปิดอ่าน 💌</p>
   </div>
@@ -705,11 +708,10 @@ button { cursor: pointer; border: none; font-family: inherit; background: none; 
 <div id="page-email" class="page hidden">
   <div class="email-card">
     <div class="email-field">
-      <span class="email-label">From:</span>
-      <span class="email-line"></span>
+      <span class="email-label">From: N</span>
     </div>
     <div class="email-field">
-      <span class="email-label">To:🍥</span>
+      <span class="email-label">To: 🍥</span>
     </div>
 
     <div class="email-divider"></div>
@@ -754,27 +756,15 @@ button { cursor: pointer; border: none; font-family: inherit; background: none; 
     <!-- Stickers + Photo Area -->
     <div class="deco-area">
       <div class="sticker-area">
-        <!-- Party hat -->
-        <div class="sticker sticker-hat">🥳</div>
-        <!-- Stars -->
-        <div class="sticker sticker-star1">⭐</div>
-        <div class="sticker sticker-star2">🌟</div>
-        <div class="sticker sticker-star3">✨</div>
-        <!-- Birthday badge -->
-        <div class="sticker sticker-badge">🎂</div>
-        <!-- Cake -->
-        <div class="sticker sticker-cake">🎁</div>
-        <!-- Hearts -->
-        <div class="sticker sticker-heart1">❤️</div>
-        <div class="sticker sticker-heart2">💕</div>
-        <!-- Confetti -->
-        <div class="sticker sticker-confetti1">🎊</div>
-        <div class="sticker sticker-confetti2">🎉</div>
-
-        <!-- Photo Frame -->
+        <div class="cake-sticker" role="img" aria-label="Birthday cake sticker">
+          <div class="cake-illustration" aria-hidden="true">
+            <span class="cake-candle"></span>
+            <span class="cake-candle"></span>
+            <span class="cake-candle"></span>
+          </div>
+        </div>
         <div class="photo-frame">
-          <!-- ✏️ ใส่รูปภาพตรงนี้: เปลี่ยน div ด้านล่างเป็น <img src="photo.jpg" alt="birthday person"> -->
-          <div class="photo-placeholder">🍥</div>
+          <img src="ดีไซน์ที่ยังไม่ได้ตั้งชื่อ.png" alt="Birthday portrait">
         </div>
       </div>
     </div>
@@ -784,7 +774,7 @@ button { cursor: pointer; border: none; font-family: inherit; background: none; 
       <!-- ✏️ เปลี่ยนข้อความอวยพรได้ตรงนี้ -->
       <h2 class="bday-title">Happy Birthday, 🍥!</h2>
       <p class="bday-body">
-        Wishing you a birthday filled with laughter, delicious cake, and all your favorite things. May the year ahead bring you fun surprises and plenty of reasons to smile. 🎂🎉
+        Wishing you a birthday filled with laughter, delicious cake, and all your favorite things. May the year ahead bring you fun surprises and plenty of reasons to smile.
         <br><br>
         Have an amazing day!
       </p>
@@ -793,10 +783,10 @@ button { cursor: pointer; border: none; font-family: inherit; background: none; 
     <section class="birthday-wish" aria-labelledby="birthday-wish-title">
       <h3 id="birthday-wish-title">One more wish</h3>
       <button class="wish-button" id="wish-button" type="button" aria-expanded="false" aria-controls="birthday-wish-message">
-        Open your birthday wish 🎁
+        Open your birthday wish
       </button>
       <p class="birthday-wish-message" id="birthday-wish-message" aria-live="polite" hidden>
-        May the year ahead bring you happy surprises, new adventures, and plenty of reasons to celebrate. 🎉
+        May the year ahead bring you happy surprises, new adventures, and plenty of reasons to celebrate.
       </p>
     </section>
 
@@ -930,13 +920,10 @@ function animateConfetti() {
 // ═══════════════════════════════════════════
 function createFloatingHearts() {
   const container = document.getElementById('floating-hearts');
-  const hearts = ['❤️', '💕', '💗', '💖', '🩷', '🤍'];
   for (let i = 0; i < 15; i++) {
     const h = document.createElement('div');
     h.className = 'float-heart';
-    h.textContent = hearts[Math.floor(Math.random() * hearts.length)];
     h.style.left = Math.random() * 100 + '%';
-    h.style.fontSize = (Math.random() * 16 + 14) + 'px';
     h.style.animationDuration = (Math.random() * 8 + 6) + 's';
     h.style.animationDelay = Math.random() * 10 + 's';
     container.appendChild(h);
@@ -964,7 +951,7 @@ document.getElementById('wish-button').addEventListener('click', (e) => {
   const button = e.currentTarget;
   document.getElementById('birthday-wish-message').hidden = false;
   button.setAttribute('aria-expanded', 'true');
-  button.textContent = 'Wish opened 🎉';
+  button.textContent = 'Wish opened';
 });
 
 </script>
