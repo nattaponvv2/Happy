@@ -512,6 +512,82 @@ button { cursor: pointer; border: none; font-family: inherit; background: none; 
   line-height: 1.6;
 }
 
+.record-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 12px;
+  color: #fff;
+  text-align: left;
+  text-decoration: none;
+}
+
+.record-link:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 6px;
+}
+
+.vinyl-disc {
+  display: block;
+  flex: 0 0 92px;
+  width: 92px;
+  height: 92px;
+  border: 1px solid rgba(255,255,255,0.35);
+  border-radius: 50%;
+  background: repeating-radial-gradient(circle, #1c1c1c 0 2px, #303030 3px 5px);
+  box-shadow: 0 5px 16px rgba(0,0,0,0.28);
+  position: relative;
+}
+
+.vinyl-disc::before {
+  content: '▶';
+  position: absolute;
+  inset: 29px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #e6a14c;
+  color: #7d332c;
+  font-size: 12px;
+}
+
+.vinyl-disc::after {
+  content: '';
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  top: 50%;
+  left: 50%;
+  border-radius: 50%;
+  background: #1c1c1c;
+  transform: translate(-50%, -50%);
+}
+
+.record-link:hover .vinyl-disc,
+.record-link:focus-visible .vinyl-disc {
+  animation: recordSpin 2.4s linear infinite;
+}
+
+@keyframes recordSpin {
+  to { transform: rotate(360deg); }
+}
+
+.record-title,
+.record-artist {
+  display: block;
+}
+
+.record-title {
+  font-family: 'Caveat', cursive;
+  font-size: 23px;
+}
+
+.record-artist {
+  margin-top: 2px;
+  font-size: 13px;
+  opacity: 0.85;
+}
+
 /* Bottom decorative bunting */
 .bunting-bottom {
   position: fixed;
@@ -722,8 +798,13 @@ button { cursor: pointer; border: none; font-family: inherit; background: none; 
 
     <section class="birthday-tune" aria-labelledby="birthday-tune-title">
       <h3 id="birthday-tune-title">A little birthday tune</h3>
-      <button class="wish-button" id="tune-button" type="button">Play a little tune ♫</button>
-      <p class="birthday-wish-message" id="tune-status" aria-live="polite" hidden></p>
+      <a class="record-link" href="https://www.youtube.com/watch?v=xfmrgQ6PFPs" target="_blank" rel="noopener noreferrer" aria-label="Listen to I Hope It's A Good Day by Bhrisbran on YouTube, opens in a new tab">
+        <span class="vinyl-disc" aria-hidden="true"></span>
+        <span class="record-copy">
+          <span class="record-title">I Hope It's A Good Day</span>
+          <span class="record-artist">Bhrisbran · Listen on YouTube</span>
+        </span>
+      </a>
     </section>
 
     <!-- Bottom Bunting -->
@@ -882,45 +963,6 @@ document.getElementById('wish-button').addEventListener('click', (e) => {
   button.textContent = 'Wish opened 🎉';
 });
 
-document.getElementById('tune-button').addEventListener('click', async (e) => {
-  const button = e.currentTarget;
-  const status = document.getElementById('tune-status');
-  const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-
-  status.hidden = false;
-  if (!AudioContextClass) {
-    status.textContent = 'Audio is not available in this browser.';
-    return;
-  }
-
-  button.disabled = true;
-  status.textContent = 'Playing a little tune...';
-
-  const audioContext = new AudioContextClass();
-  const melody = [523.25, 659.25, 783.99, 1046.5];
-  const startTime = audioContext.currentTime + 0.05;
-
-  melody.forEach((frequency, index) => {
-    const noteStart = startTime + index * 0.24;
-    const oscillator = audioContext.createOscillator();
-    const volume = audioContext.createGain();
-    oscillator.type = 'sine';
-    oscillator.frequency.value = frequency;
-    volume.gain.setValueAtTime(0.0001, noteStart);
-    volume.gain.exponentialRampToValueAtTime(0.08, noteStart + 0.03);
-    volume.gain.exponentialRampToValueAtTime(0.0001, noteStart + 0.32);
-    oscillator.connect(volume);
-    volume.connect(audioContext.destination);
-    oscillator.start(noteStart);
-    oscillator.stop(noteStart + 0.34);
-  });
-
-  window.setTimeout(async () => {
-    await audioContext.close();
-    button.disabled = false;
-    status.textContent = 'Hope that added a little sparkle to your day. 🎉';
-  }, 1400);
-});
 </script>
 
 </body>
