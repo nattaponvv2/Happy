@@ -774,7 +774,12 @@ button { cursor: pointer; border: none; font-family: inherit; background: none; 
       <!-- ✏️ เปลี่ยนข้อความอวยพรได้ตรงนี้ -->
       <h2 class="bday-title">Happy Birthday, 🍥!</h2>
       <p class="bday-body">
-        Wishing you a birthday filled with laughter, delicious cake, and all your favorite things. May the year ahead bring you fun surprises and plenty of reasons to smile.
+        อ่ะแฮ่มๆ 1 2 3
+        Happy  birthday to you,
+Happy birthday to you
+Happy birthday, Happy birthday
+Happy birthday to you
+🎉<br>
         <br><br>
         Have an amazing day!
       </p>
@@ -792,6 +797,8 @@ button { cursor: pointer; border: none; font-family: inherit; background: none; 
 
     <section class="birthday-tune" aria-labelledby="birthday-tune-title">
       <h3 id="birthday-tune-title">A little birthday tune</h3>
+      <button class="wish-button" id="birthday-song-button" type="button">Play Happy Birthday</button>
+      <p class="birthday-wish-message" id="birthday-song-status" aria-live="polite" hidden></p>
       <a class="record-link" href="https://www.youtube.com/watch?v=bHKYKbLEvXM" target="_blank" rel="noopener noreferrer" aria-label="Listen to ดี by themoonwillalwaysbewithme on YouTube, opens in a new tab">
         <span class="vinyl-disc" aria-hidden="true"></span>
         <span class="record-copy">
@@ -838,6 +845,10 @@ const pages = {
   email: document.getElementById('page-email'),
   birthday: document.getElementById('page-birthday')
 };
+
+let birthdayAudioContext = null;
+let birthdaySongTimer = null;
+let birthdaySongNextStart = 0;
 
 function showPage(pageName) {
   Object.values(pages).forEach(p => {
@@ -915,6 +926,74 @@ function animateConfetti() {
   else ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
+async function playBirthdaySong() {
+  const button = document.getElementById('birthday-song-button');
+  const status = document.getElementById('birthday-song-status');
+
+  if (birthdayAudioContext) {
+    window.clearTimeout(birthdaySongTimer);
+    await birthdayAudioContext.close();
+    birthdayAudioContext = null;
+    birthdaySongNextStart = 0;
+    button.textContent = 'Play Happy Birthday';
+    status.textContent = 'Song stopped.';
+    return;
+  }
+
+  const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+  status.hidden = false;
+  if (!AudioContextClass) {
+    status.textContent = 'Audio is not available in this browser.';
+    return;
+  }
+
+  birthdayAudioContext = new AudioContextClass();
+  await birthdayAudioContext.resume();
+
+  const melody = [
+    [392, 0.28], [392, 0.28], [440, 0.55], [392, 0.55], [523.25, 0.55], [493.88, 1.05],
+    [392, 0.28], [392, 0.28], [440, 0.55], [392, 0.55], [587.33, 0.55], [523.25, 1.05],
+    [392, 0.28], [392, 0.28], [783.99, 0.55], [659.25, 0.55], [523.25, 0.55], [493.88, 0.55], [440, 1.05],
+    [698.46, 0.28], [698.46, 0.28], [659.25, 0.55], [523.25, 0.55], [587.33, 0.55], [523.25, 1.05]
+  ];
+  birthdaySongNextStart = birthdayAudioContext.currentTime + 0.05;
+
+  function scheduleMelodyLoop() {
+    const audioContext = birthdayAudioContext;
+    if (!audioContext) return;
+
+    const startTime = Math.max(audioContext.currentTime + 0.05, birthdaySongNextStart);
+    let elapsed = 0;
+
+    melody.forEach(([frequency, duration]) => {
+      const oscillator = audioContext.createOscillator();
+      const volume = audioContext.createGain();
+      const noteStart = startTime + elapsed;
+      oscillator.type = 'triangle';
+      oscillator.frequency.value = frequency;
+      volume.gain.setValueAtTime(0.0001, noteStart);
+      volume.gain.exponentialRampToValueAtTime(0.09, noteStart + 0.025);
+      volume.gain.setValueAtTime(0.09, noteStart + duration * 0.72);
+      volume.gain.exponentialRampToValueAtTime(0.0001, noteStart + duration);
+      oscillator.connect(volume);
+      volume.connect(audioContext.destination);
+      oscillator.start(noteStart);
+      oscillator.stop(noteStart + duration);
+      elapsed += duration + 0.035;
+    });
+
+    birthdaySongNextStart = startTime + elapsed;
+    birthdaySongTimer = window.setTimeout(
+      scheduleMelodyLoop,
+      Math.max(50, (birthdaySongNextStart - audioContext.currentTime - 0.1) * 1000)
+    );
+  }
+
+  scheduleMelodyLoop();
+  button.textContent = 'Stop looping';
+  status.textContent = 'Playing Happy Birthday on repeat.';
+}
+
 // ═══════════════════════════════════════════
 // FLOATING HEARTS
 // ═══════════════════════════════════════════
@@ -943,9 +1022,12 @@ document.getElementById('notif-click').addEventListener('click', () => {
 document.getElementById('see-attachment').addEventListener('click', (e) => {
   e.preventDefault();
   showPage('birthday');
+  playBirthdaySong();
   createFloatingHearts();
   setTimeout(() => fireConfetti(), 400);
 });
+
+document.getElementById('birthday-song-button').addEventListener('click', playBirthdaySong);
 
 document.getElementById('wish-button').addEventListener('click', (e) => {
   const button = e.currentTarget;
