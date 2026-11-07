@@ -784,16 +784,15 @@ button { cursor: pointer; border: none; font-family: inherit; background: none; 
         Happy birthday to you<br>
       </p>
       <p class="bday-body" lang="th">สุขสันต์วันเกิดนะครับ🍥 ผมขออวยพรเลยนะ ขอให้ต่อจากนี้ไม่ว่าคุณจะเจอเรื่องอะไรมาทำให้ไม่มีความสุขผมขอให้หายไปตลอดกาลด้วยเถอะ และต่อจากนี้ขอให้พบแต่กับความสุขนะครับ เพี้ยงๆ!!</p>
-      <p class="bday-body">Have an amazing day!</p>
     </div>
 
     <section class="birthday-wish" aria-labelledby="birthday-wish-title">
-      <h3 id="birthday-wish-title">One more wish</h3>
+      <h3 id="birthday-wish-title">ลองกดดูครับๆ</h3>
       <button class="wish-button" id="wish-button" type="button" aria-expanded="false" aria-controls="birthday-wish-message">
-        Open your birthday wish
+        !!!
       </button>
       <p class="birthday-wish-message" id="birthday-wish-message" aria-live="polite" hidden>
-        May the year ahead bring you happy surprises, new adventures, and plenty of reasons to celebrate.
+        ฮั่นแนแน่! อยากได้อีกข้อใช่ไหมล่ะ? งั้นผมขออวยพรให้คุณมีความสุขมากๆ มีรอยยิ้มบนใบหน้าตลอดเวลา และขอให้ทุกวันของคุณเต็มไปด้วยความรักและความอบอุ่นจากคนรอบข้างนะครับ! ผมไม่รู้จะอวยพรอะไรแล้ววว บ๊ายบายนะครับ 🍥
       </p>
     </section>
 
@@ -1035,7 +1034,7 @@ document.getElementById('wish-button').addEventListener('click', (e) => {
   const button = e.currentTarget;
   document.getElementById('birthday-wish-message').hidden = false;
   button.setAttribute('aria-expanded', 'true');
-  button.textContent = 'Wish opened';
+  button.textContent = 'เปิดแล้ว ไม่ให้ปิด';
 });
 
 </script>
